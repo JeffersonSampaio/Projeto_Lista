@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../Projeto_Lista -I. -I../../../../Qt/5.11.0/gcc_64/include -I../../../../Qt/5.11.0/gcc_64/include/QtWidgets -I../../../../Qt/5.11.0/gcc_64/include/QtGui -I../../../../Qt/5.11.0/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I../../../../Qt/5.11.0/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../Projeto_Lista -I. -I../../../../Qt/5.11.0/gcc_64/include -I../../../../Qt/5.11.0/gcc_64/include/QtWidgets -I../../../../Qt/5.11.0/gcc_64/include/QtGui -I../../../../Qt/5.11.0/gcc_64/include/QtSql -I../../../../Qt/5.11.0/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I../../../../Qt/5.11.0/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/jefferson/Qt/5.11.0/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -38,7 +38,7 @@ DISTNAME      = Projeto_Lista1.0.0
 DISTDIR = /home/jefferson/WorkStation/Qtcreator/Projeto_Lista/build-Projeto_Lista-Desktop_Qt_5_11_0_GCC_64bit-Debug/.tmp/Projeto_Lista1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/jefferson/Qt/5.11.0/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/jefferson/Qt/5.11.0/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/home/jefferson/Qt/5.11.0/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Sql -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -51,9 +51,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Projeto_Lista/main.cpp \
-		../Projeto_Lista/mainwindow.cpp moc_mainwindow.cpp
+		../Projeto_Lista/mainwindow.cpp \
+		../Projeto_Lista/cliente.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		cliente.o \
 		moc_mainwindow.o
 DIST          = ../../../../Qt/5.11.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/common/unix.conf \
@@ -224,6 +226,7 @@ DIST          = ../../../../Qt/5.11.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/spec_post.prf \
+		../Projeto_Lista/.qmake.stash \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/toolchain.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -243,8 +246,10 @@ DIST          = ../../../../Qt/5.11.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/exceptions.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/yacc.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/lex.prf \
-		../Projeto_Lista/Projeto_Lista.pro ../Projeto_Lista/mainwindow.h ../Projeto_Lista/main.cpp \
-		../Projeto_Lista/mainwindow.cpp
+		../Projeto_Lista/Projeto_Lista.pro ../Projeto_Lista/mainwindow.h \
+		../Projeto_Lista/cliente.h ../Projeto_Lista/main.cpp \
+		../Projeto_Lista/mainwindow.cpp \
+		../Projeto_Lista/cliente.cpp
 QMAKE_TARGET  = Projeto_Lista
 DESTDIR       = 
 TARGET        = Projeto_Lista
@@ -425,6 +430,7 @@ Makefile: ../Projeto_Lista/Projeto_Lista.pro ../../../../Qt/5.11.0/gcc_64/mkspec
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/qt_config.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/toolchain.prf \
 		../../../../Qt/5.11.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -447,6 +453,7 @@ Makefile: ../Projeto_Lista/Projeto_Lista.pro ../../../../Qt/5.11.0/gcc_64/mkspec
 		../Projeto_Lista/Projeto_Lista.pro \
 		../../../../Qt/5.11.0/gcc_64/lib/libQt5Widgets.prl \
 		../../../../Qt/5.11.0/gcc_64/lib/libQt5Gui.prl \
+		../../../../Qt/5.11.0/gcc_64/lib/libQt5Sql.prl \
 		../../../../Qt/5.11.0/gcc_64/lib/libQt5Core.prl
 	$(QMAKE) -o Makefile ../Projeto_Lista/Projeto_Lista.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 ../../../../Qt/5.11.0/gcc_64/mkspecs/features/spec_pre.prf:
@@ -618,6 +625,7 @@ Makefile: ../Projeto_Lista/Projeto_Lista.pro ../../../../Qt/5.11.0/gcc_64/mkspec
 ../../../../Qt/5.11.0/gcc_64/mkspecs/features/qt_config.prf:
 ../../../../Qt/5.11.0/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../../../Qt/5.11.0/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../../Qt/5.11.0/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../../../Qt/5.11.0/gcc_64/mkspecs/features/toolchain.prf:
 ../../../../Qt/5.11.0/gcc_64/mkspecs/features/default_pre.prf:
@@ -640,6 +648,7 @@ Makefile: ../Projeto_Lista/Projeto_Lista.pro ../../../../Qt/5.11.0/gcc_64/mkspec
 ../Projeto_Lista/Projeto_Lista.pro:
 ../../../../Qt/5.11.0/gcc_64/lib/libQt5Widgets.prl:
 ../../../../Qt/5.11.0/gcc_64/lib/libQt5Gui.prl:
+../../../../Qt/5.11.0/gcc_64/lib/libQt5Sql.prl:
 ../../../../Qt/5.11.0/gcc_64/lib/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../Projeto_Lista/Projeto_Lista.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
@@ -656,8 +665,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt/5.11.0/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Projeto_Lista/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Projeto_Lista/main.cpp ../Projeto_Lista/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Projeto_Lista/mainwindow.h ../Projeto_Lista/cliente.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Projeto_Lista/main.cpp ../Projeto_Lista/mainwindow.cpp ../Projeto_Lista/cliente.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Projeto_Lista/mainwindow.ui $(DISTDIR)/
 
 
@@ -801,7 +810,7 @@ moc_mainwindow.cpp: ../../../../Qt/5.11.0/gcc_64/include/QtWidgets/QMainWindow \
 		../Projeto_Lista/mainwindow.h \
 		moc_predefs.h \
 		../../../../Qt/5.11.0/gcc_64/bin/moc
-	/home/jefferson/Qt/5.11.0/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/jefferson/Qt/5.11.0/gcc_64/mkspecs/linux-g++ -I/home/jefferson/WorkStation/Qtcreator/Projeto_Lista/Projeto_Lista -I/home/jefferson/Qt/5.11.0/gcc_64/include -I/home/jefferson/Qt/5.11.0/gcc_64/include/QtWidgets -I/home/jefferson/Qt/5.11.0/gcc_64/include/QtGui -I/home/jefferson/Qt/5.11.0/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Projeto_Lista/mainwindow.h -o moc_mainwindow.cpp
+	/home/jefferson/Qt/5.11.0/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/jefferson/Qt/5.11.0/gcc_64/mkspecs/linux-g++ -I/home/jefferson/WorkStation/Qtcreator/Projeto_Lista/Projeto_Lista -I/home/jefferson/Qt/5.11.0/gcc_64/include -I/home/jefferson/Qt/5.11.0/gcc_64/include/QtWidgets -I/home/jefferson/Qt/5.11.0/gcc_64/include/QtGui -I/home/jefferson/Qt/5.11.0/gcc_64/include/QtSql -I/home/jefferson/Qt/5.11.0/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Projeto_Lista/mainwindow.h -o moc_mainwindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1045,8 +1054,29 @@ mainwindow.o: ../Projeto_Lista/mainwindow.cpp ../Projeto_Lista/mainwindow.h \
 		../../../../Qt/5.11.0/gcc_64/include/QtGui/qtouchdevice.h \
 		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../../Qt/5.11.0/gcc_64/include/QtGui/qicon.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtCore/QVariant \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/QApplication \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qapplication.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtCore/qeventloop.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtGui/qguiapplication.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtGui/qinputmethod.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/QMenuBar \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qmenubar.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qmenu.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qaction.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/QStatusBar \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qstatusbar.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/QToolBar \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/qtoolbar.h \
+		../../../../Qt/5.11.0/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Projeto_Lista/mainwindow.cpp
+
+cliente.o: ../Projeto_Lista/cliente.cpp ../Projeto_Lista/cliente.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cliente.o ../Projeto_Lista/cliente.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
