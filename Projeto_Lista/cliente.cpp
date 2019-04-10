@@ -54,3 +54,15 @@ void Cliente::setFone(const QString &value)
 {
     fone = value;
 }
+
+void ClientesList::clear()
+{
+    qDeleteAll(this->list);
+    this->list.clear();
+
+}
+
+void ClientesList::cloaditems()
+{
+
+}

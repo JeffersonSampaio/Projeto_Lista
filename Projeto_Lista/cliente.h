@@ -1,6 +1,7 @@
 #ifndef CLIENTE_H
 #define CLIENTE_H
 #include <QString>
+#include <QVector>
 
 class Cliente
 {
@@ -28,7 +29,21 @@ private:
     QString nome;
     QString email;
     QString fone;
+};
 
+class ClientesList
+{
+public:
+    QVector<Cliente*> list;
+public:
+    ClientesList();
+
+    Cliente * item(int index);
+    int count();
+    Cliente* createNew();
+public:
+    void clear();
+    void cloaditems();
 };
 
 #endif // CLIENTE_H
